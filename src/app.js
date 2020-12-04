@@ -3,6 +3,7 @@ const morgan = require('morgan');
 const cors = require('cors');
 const helmet = require('helmet');
 const { NODE_ENV } = require('./config');
+const ArticlesService = require('./articles-service');
 require('dotenv').config();
 
 const app = express();
@@ -16,6 +17,15 @@ app.use(cors());
 app.get('/', (req, res) => {
   res.send('Hello World!')
 })
+
+app.get('/articles', (req, res, next) => {
+  const db = req.app.get('db')
+  ArticlesService.getAllArticles(db)
+    .then(articles => {
+      res.status(200).json(articles)
+    })
+    .catch(next)
+});
 
 app.use(function errorHandler(error, req, res, next) {
   let response;
