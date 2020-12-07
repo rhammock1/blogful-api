@@ -43,7 +43,7 @@ articlesRouter
 
   articlesRouter
     .route('/:article_id')
-    .get((req, res, next) => {
+    .all((req, res, next) => {
       const db = req.app.get('db');
       ArticlesService.getById(db, req.params.article_id)
         .then(article => {
@@ -52,9 +52,18 @@ articlesRouter
               error: { message: `Article doesn't exist` }
             })
           }
+          res.article = article //saves for the next middleware
+          next()
+        })
+        .catch(next)
+    })
+    .get((req, res, next) => {
           res.status(200).json({
-            id: article.id, style: article.style, title: xss(article.title), content: xss(article.content), date_published: article.date_published
-          })
+            id: article.id, 
+            style: article.style, 
+            title: xss(article.title), 
+            content: xss(article.content), date_published: article.date_published
+          
         })
         .catch(next)
     })
