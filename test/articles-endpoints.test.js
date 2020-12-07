@@ -22,6 +22,13 @@ describe.only('Articles Endpoints', function () {
   afterEach('Cleanup', () => db('blogful_articles').truncate())
 
   describe(`GET /articles`, () => {
+    context(`Given there are no articles`, () => {
+      it('responds with 200 and an empty list', () => {
+        return supertest(app)
+          .get('/articles')
+          .expect(200, [])
+      })
+    })
     context('Given there are articles in the database', () => {
     const testArticles = makeArticlesArray();
 
@@ -39,6 +46,15 @@ describe.only('Articles Endpoints', function () {
   })
 
   describe(`GET /articles/:article_id`, () => {
+    context(`Given there are no articles`, () => {
+      it(`responds with 404`, () => {
+        const articleId = 123456;
+        return supertest(app)
+          .get(`/articles/${articleId}`)
+          .expect(404, { error: { message: `Article doesn't exist` } })
+      })
+    })
+
     context('Given there are articles in the database', () => {
       const testArticles = makeArticlesArray();
 
@@ -55,6 +71,19 @@ describe.only('Articles Endpoints', function () {
         .get(`/articles/${articleId}`)
         .expect(200, expectedArticle);
     })
+    })
+  })
+
+  describe.only(`POST /articles`, () => {
+    it(`creates an article, responding with 201 and the new article`, () => {
+      return supertest(app)
+        .post('/articles')
+        .send({
+          title: 'Test article',
+          style: 'Listicle',
+          content: 'Test contnent'
+        })
+        .expect(201)
     })
   })
 })
