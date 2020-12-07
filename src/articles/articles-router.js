@@ -10,10 +10,10 @@ articlesRouter
     const db = req.app.get('db')
     ArticlesService.getAllArticles(db)
       .then(articles => {
-        articles.forEach(article => {
-          xss(article.title);
-          xss(article.content);
-        })
+        // articles.forEach(article => {
+        //   xss(article.title);
+        //   xss(article.content);
+        // })
         res.status(200).json(articles)
       })
       .catch(next)
@@ -59,10 +59,10 @@ articlesRouter
     })
     .get((req, res, next) => {
           res.status(200).json({
-            id: article.id, 
-            style: article.style, 
-            title: xss(article.title), 
-            content: xss(article.content), date_published: article.date_published
+            id: res.article.id, 
+            style: res.article.style, 
+            title: xss(res.article.title), 
+            content: xss(res.article.content), date_published: res.article.date_published
           
         })
         .catch(next)

@@ -123,7 +123,7 @@ describe('Articles Endpoints', function () {
   })
 
   describe(`POST /articles`, () => {
-    this.retries(3)
+    
     context(`Given an XSS attack article`, () => {
      const maliciousArticle = {
        id: 911,
@@ -149,7 +149,7 @@ describe('Articles Endpoints', function () {
      })
    })
     it(`creates an article, responding with 201 and the new article`, () => {
-      
+      this.retries(3)
       const newArticle = {
           title: 'Test article',
           style: 'Listicle',
@@ -195,7 +195,7 @@ describe('Articles Endpoints', function () {
     })
   })
 
-  describe.only(`DELETE /articles/:article_id`, () => {
+  describe(`DELETE /articles/:article_id`, () => {
     context('Given no articles', () => {
       it('responds with 404', () => {
         const articleId = 123456
