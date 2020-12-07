@@ -7,7 +7,7 @@ const ArticlesService = require('./articles-service');
 require('dotenv').config();
 
 const app = express();
-
+const jsonParser = express.json();
 const morganOption = (NODE_ENV === 'production') ? 'tiny' : 'common';
 
 app.use(morgan(morganOption));
@@ -31,6 +31,18 @@ app.get('/articles/:article_id', (req, res, next) => {
   ArticlesService.getById(db, req.params.article_id)
     .then(article => {
       res.status(200).json(article)
+    })
+    .catch(next)
+});
+app.post('/articles', jsonParser, (req, res, next) => {
+  const { title, content, style } = req.body;
+  const newArticle = { title, content, style };
+  ArticlesService.insertArticle(
+    req.app.get('db'),
+    newArticle
+  )
+    .then(article => {
+      res.status(201).json(article)
     })
     .catch(next)
 })
