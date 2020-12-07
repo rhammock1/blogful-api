@@ -36,7 +36,7 @@ articlesRouter
       newArticle
     )
       .then(article => {
-        res.status(201).location(`/articles/${article.id}`).json(article)
+        res.status(201).location(`${req.originalUrl}/${article.id}`).json(article)
       })
       .catch(next)
   })
