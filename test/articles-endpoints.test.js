@@ -4,7 +4,7 @@ const supertest = require('supertest');
 const app = require('../src/app');
 const { makeArticlesArray } = require('./articles.fixtures');
 
-describe.only('Articles Endpoints', function () {
+describe('Articles Endpoints', function () {
   let db;
 
   before('make knex instance', () => {
@@ -74,7 +74,7 @@ describe.only('Articles Endpoints', function () {
     })
   })
 
-  describe.only(`POST /articles`, () => {
+  describe(`POST /articles`, () => {
     it(`creates an article, responding with 201 and the new article`, () => {
       this.retries(3)
       const newArticle = {
